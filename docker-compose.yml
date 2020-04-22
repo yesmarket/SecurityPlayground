@@ -1,0 +1,48 @@
+version: '3.5'
+
+volumes:
+   certs:
+
+networks:
+   pod:
+
+services:
+
+   service:
+      build:
+         context: service/
+      container_name: service
+      ports:
+         - 8080
+      networks:
+         - pod
+
+   ca:
+      build:
+         context: ca/
+         args:
+            PASS_PHRASE: ${PASS_PHRASE}
+            SUBJECT_ALTERNATIVE_NAME: ${SUBJECT_ALTERNATIVE_NAME}
+      container_name: ca
+      networks:
+         - pod
+      volumes:
+         - certs:/etc/ssl
+         - c:\temp\certs:/tmp/certs
+
+   proxy:
+      build:
+         context: nginx/
+         args:
+            SUBJECT_ALTERNATIVE_NAME: ${SUBJECT_ALTERNATIVE_NAME}
+      container_name: proxy
+      ports:
+         - 8080:80
+         - 443:443
+      networks:
+         - pod
+      volumes:
+         - certs:/etc/ssl
+      depends_on:
+         - ca
+         - service

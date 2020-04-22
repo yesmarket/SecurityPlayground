@@ -1,0 +1,14 @@
+{
+  "name": "service",
+  "version": "1.0.0",
+  "description": "simple nodejs API",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "Ryan Bartsch",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
